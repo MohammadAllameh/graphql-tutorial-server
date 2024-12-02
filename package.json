@@ -1,0 +1,24 @@
+{
+  "name": "grap",
+  "version": "1.0.0",
+  "description": "first project for use grapQL",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js"
+  },
+  "keywords": [
+    "grapQL"
+  ],
+  "author": "MohammadAllameh",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.21.1",
+    "graphql": "^16.9.0",
+    "graphql-http": "^1.22.3",
+    "lodash": "^4.17.21"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.7"
+  }
+}
