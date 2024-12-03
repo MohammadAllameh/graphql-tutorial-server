@@ -117,6 +117,7 @@ const RootQuery = new GraphQLObjectType({
                 return teahers;
             },
         },
+        // add conversanl type
         // author: {},
         // book: {
         //     type,
