@@ -55,7 +55,8 @@ const TeacherType = new GraphQLObjectType({
         lessons: {
             type: new GraphQLList(LessonType),
             resolve(parent, args) {
-                return lodash.filter(lessons, { teacherId: parent.id });
+                return Teacher.findById(parent.id);
+                // return lodash.filter(lessons, { teacherId: parent.id });
             },
         },
     }),
