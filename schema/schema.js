@@ -3,15 +3,6 @@ const lodash = require('lodash');
 const Teacher = require('../models/teacher.model');
 const Lesson = require('../models/lesson.model');
 
-const {
-    GraphQLObjectType,
-    GraphQLString,
-    GraphQLSchema,
-    GraphQLID,
-    GraphQLInt,
-    GraphQLList,
-} = graphql;
-
 // const lessons = [
 //     { id: '1', name: 'computer-vison', group: 'ai', teacherId: '1' },
 //     { id: '2', name: 'NLP', group: 'ai', teacherId: '1' },
@@ -30,6 +21,17 @@ const {
 //     { id: '3', name: 'Mr. C', age: 32 },
 //     { id: '4', name: 'Ms. D', age: 42 },
 // ];
+
+const {
+    GraphQLObjectType,
+    GraphQLString,
+    GraphQLSchema,
+    GraphQLID,
+    GraphQLInt,
+    GraphQLList,
+    GraphQLNonNull,
+} = graphql;
+
 const LessonType = new GraphQLObjectType({
     name: 'lesson',
     fields: () => ({
@@ -40,7 +42,6 @@ const LessonType = new GraphQLObjectType({
             type: TeacherType,
             resolve(parent, args) {
                 return Teacher.findById(parent.teacherId);
-                // return lodash.find(teachers, { id: parent.teacherId });
             },
         },
     }),
@@ -55,8 +56,7 @@ const TeacherType = new GraphQLObjectType({
         lessons: {
             type: new GraphQLList(LessonType),
             resolve(parent, args) {
-                return Teacher.findById(parent.id);
-                // return lodash.filter(lessons, { teacherId: parent.id });
+                return Lesson.find({ teacherId: parent.id });
             },
         },
     }),
@@ -69,26 +69,26 @@ const RootQuery = new GraphQLObjectType({
             type: LessonType,
             args: { id: { type: GraphQLID } },
             resolve(parent, args) {
-                return lodash.find(lessons, { id: args.id });
+                return Lesson.findById(args.id);
             },
         },
         teacher: {
             type: TeacherType,
             args: { id: { type: GraphQLID } },
             resolve(parent, args) {
-                return lodash.find(teachers, { id: args.id });
+                return Teacher.findById(args.id);
             },
         },
         lessons: {
             type: new GraphQLList(LessonType),
             resolve(parent, args) {
-                return lessons;
+                return Lesson.find({});
             },
         },
         teachers: {
             type: new GraphQLList(TeacherType),
             resolve(parent, args) {
-                return teachers;
+                return Teacher.find({});
             },
         },
     },
@@ -100,7 +100,7 @@ const Mutation = new GraphQLObjectType({
         addteacher: {
             type: TeacherType,
             args: {
-                name: { type: GraphQLString },
+                name: { type: new GraphQLNonNull(GraphQLString) },
                 age: { type: GraphQLInt },
             },
             resolve(parent, args) {
@@ -114,15 +114,15 @@ const Mutation = new GraphQLObjectType({
         addlesson: {
             type: LessonType,
             args: {
-                name: { type: GraphQLString },
-                group: { type: GraphQLString },
-                teaherId: { type: GraphQLID },
+                name: { type: new GraphQLNonNull(GraphQLString) },
+                group: { type: new GraphQLNonNull(GraphQLString) },
+                teacherId: { type: new GraphQLNonNull(GraphQLID) },
             },
             resolve(parent, args) {
                 var lesson = new Lesson({
                     name: args.name,
                     group: args.group,
-                    teaherId: args.teaherId,
+                    teacherId: args.teacherId,
                 });
                 return lesson.save();
             },
