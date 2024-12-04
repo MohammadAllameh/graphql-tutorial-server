@@ -12,24 +12,24 @@ const {
     GraphQLList,
 } = graphql;
 
-const lessons = [
-    { id: '1', name: 'computer-vison', group: 'ai', teacherId: '1' },
-    { id: '2', name: 'NLP', group: 'ai', teacherId: '1' },
-    { id: '3', name: 'ML', group: 'ai', teacherId: '1' },
-    { id: '4', name: 'Web Developer', group: 'software', teacherId: '2' },
-    { id: '5', name: 'Desctop Developer', group: 'software', teacherId: '2' },
-    { id: '6', name: 'Mobile Developer', group: 'software', teacherId: '2' },
-    { id: '7', name: 'TV Developer', group: 'software', teacherId: '2' },
-    { id: '8', name: 'IOT Developer', group: 'software', teacherId: '2' },
-    { id: '9', name: 'Unrailer Developer', group: 'game', teacherId: '3' },
-    { id: '10', name: 'Unity Devloper', group: 'game', teacherId: '4' },
-];
-const teachers = [
-    { id: '1', name: 'Mr. A', age: 23 },
-    { id: '2', name: 'Mr. B', age: 46 },
-    { id: '3', name: 'Mr. C', age: 32 },
-    { id: '4', name: 'Ms. D', age: 42 },
-];
+// const lessons = [
+//     { id: '1', name: 'computer-vison', group: 'ai', teacherId: '1' },
+//     { id: '2', name: 'NLP', group: 'ai', teacherId: '1' },
+//     { id: '3', name: 'ML', group: 'ai', teacherId: '1' },
+//     { id: '4', name: 'Web Developer', group: 'software', teacherId: '2' },
+//     { id: '5', name: 'Desctop Developer', group: 'software', teacherId: '2' },
+//     { id: '6', name: 'Mobile Developer', group: 'software', teacherId: '2' },
+//     { id: '7', name: 'TV Developer', group: 'software', teacherId: '2' },
+//     { id: '8', name: 'IOT Developer', group: 'software', teacherId: '2' },
+//     { id: '9', name: 'Unrailer Developer', group: 'game', teacherId: '3' },
+//     { id: '10', name: 'Unity Devloper', group: 'game', teacherId: '4' },
+// ];
+// const teachers = [
+//     { id: '1', name: 'Mr. A', age: 23 },
+//     { id: '2', name: 'Mr. B', age: 46 },
+//     { id: '3', name: 'Mr. C', age: 32 },
+//     { id: '4', name: 'Ms. D', age: 42 },
+// ];
 const LessonType = new GraphQLObjectType({
     name: 'lesson',
     fields: () => ({
@@ -107,6 +107,22 @@ const Mutation = new GraphQLObjectType({
                     age: args.age,
                 });
                 return teacher.save();
+            },
+        },
+        addlesson: {
+            type: LessonType,
+            args: {
+                name: { type: GraphQLString },
+                group: { type: GraphQLString },
+                teaherId: { type: GraphQLID },
+            },
+            resolve(parent, args) {
+                var lesson = new Lesson({
+                    name: args.name,
+                    group: args.group,
+                    teaherId: args.teaherId,
+                });
+                return lesson.save();
             },
         },
     },
