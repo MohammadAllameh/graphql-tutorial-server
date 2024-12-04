@@ -39,7 +39,8 @@ const LessonType = new GraphQLObjectType({
         teacher: {
             type: TeacherType,
             resolve(parent, args) {
-                return lodash.find(teachers, { id: parent.teacherId });
+                return Teacher.findById(parent.teacherId);
+                // return lodash.find(teachers, { id: parent.teacherId });
             },
         },
     }),
