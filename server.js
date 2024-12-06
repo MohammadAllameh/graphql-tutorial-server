@@ -1,22 +1,11 @@
 const app = require('express')();
 const schema = require('./schema/schema');
 const { createHandler } = require('graphql-http/lib/use/express');
-
+const cors = require('cors');
 const mongoose = require('mongoose');
 
 // mongoose.set('strictQuery', false);
 mongoose.connect('mongodb://127.0.0.1:27017/graphql-tutorial');
-// .then((res) => {
-//     console.log('\x1b[32m conect databse. \x1b[0m');
-//     // فراخوانی تابع بررسی و ایجاد کاربران سیستمی پس از اتصال موفق به دیتابیس
-// })
-// .catch((err) =>
-//     console.error('\x1b[31m Error conect databse: \x1b[0m', err),
-// );
-
-// mongoose.Connection.once('open', () => {
-//     console.log('\x1b[32m conect databse2. \x1b[0m');
-// });
 mongoose.connection.once('open', () => {
     console.log('\x1b[32m conect databse2. \x1b[0m');
 });
@@ -27,6 +16,14 @@ var root = {
         return 'Hello world!';
     },
 };
+
+app.use(cors({ origin: 'http://localhost:3001', optionsSuccessStatus: 200 }));
+app.use(function (req, res, next) {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+    res.header('Access-Control-Allow-Headers', 'Content-Type');
+    next();
+});
 
 app.use(
     '/graphql',
